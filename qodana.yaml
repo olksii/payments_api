@@ -2,4 +2,4 @@ version: "1.0"
 profile:
   name: qodana.recommended
 
-linter: jetbraines/qodana-js:latest
+linter: jetbraines/qodana-js
