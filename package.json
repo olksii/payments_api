@@ -11,7 +11,7 @@
     "start": "nodemon --exec babel-node src/script.js",
     "build": "webpack",
     "lint": "eslint .",
-    "lintfix":"eslint . --fix" 
+    "lintfix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,8 @@
     "node": "22.3.0"
   },
   "dependencies": {
-    "babel-core": "^4.7.16",
-    "babel-preset-env": "^1.7.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^0.0.0",
     "babel-traverse": "^6.26.0",
     "babylon": "^6.18.0",
     "bcrypt": "^5.0.1",
@@ -40,7 +40,7 @@
     "fs-extra": "^10.1.0",
     "jsonwebtoken": "^9.0.1",
     "multer": "^1.4.5-lts.1",
-    "mysql2": "^2.3.3",
+    "mysql2": "^3.10.0",
     "pg": "^8.7.3",
     "sequelize": "^6.21.3",
     "socket-io": "^1.0.0",
