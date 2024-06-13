@@ -3,3 +3,7 @@ profile:
   name: qodana.recommended
 
 linter: jetbrains/qodana-js
+
+bootstrap: |
+  composer install
+  npm install 
