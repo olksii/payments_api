@@ -27,9 +27,7 @@ const authService = {
 			throw (error_content);
 		} else {
 			try {
-				console.log('Darta2 ', dataObj);
-				const newUser = await authModel.registerNewUser(dataObj);
-				return newUser;
+				return await authModel.registerNewUser(dataObj);
 			} catch (error) {
 				return error;
 			}

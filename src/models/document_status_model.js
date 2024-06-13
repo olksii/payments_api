@@ -4,19 +4,17 @@ const documentStatusModel = {
 
 	async addDocumentStatus(requestData) {
 		try {
-			const addDocumentStatus = await DocumentStatus.create({
+			return await DocumentStatus.create({
 				name: requestData.name,
 				description: requestData.description,
 			});
-			return (addDocumentStatus);
 		} catch (error) {
-			return ('Model', error);
+			return (error);
 		}
 	},
 	async getDocumentStatus() {
 		try {
-			const documentStatus = await DocumentStatus.findAll({where: {enabled: true}});
-			return (documentStatus);
+			return await DocumentStatus.findAll({where: {enabled: true}});
 		} catch (error) {
 			return (error);
 		}

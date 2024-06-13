@@ -13,19 +13,9 @@ fs.writeFile(filePath, 'hello' + '\n', (err, data) => {
 	console.log(data);
 });
 
-function errorHandler(err) {
-	console.log('Error is', err);
-	err = JSON.stringify(err);
-	fs.appendFile(filePath, a + '\t' + err + '\n', (err, data) => {
-		if (err) {
-			return console.log('Errrorrrr', err);
-		}
-	});
-}
-
 const responseHandlers = {
 
-	errorHandler(res, err, req) {
+	errorHandler(res, err) {
 		console.log('Thisd', err);
 		const d = Date(Date.now());
 		const a = d.toString();
@@ -40,7 +30,7 @@ const responseHandlers = {
 		});
 		// Console.log('Error is', err)
 		// err = JSON.stringify(err)
-		fs.appendFile(filePath, a + '\t' + err + '\n', (err, data) => {
+		fs.appendFile(filePath, a + '\t' + err + '\n', (err) => {
 			if (err) {
 				return console.log('Errrorrrr', err);
 			}

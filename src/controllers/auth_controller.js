@@ -1,6 +1,5 @@
 const {authService} = require('../service/auth_service');
 const {responseHandlers} = require('../helpers/response_handlers.js');
-const {user} = require('../validation/user_reg_validation');
 const bcrypt = require('bcrypt');
 const {generateToken} = require('../helpers/generate_token');
 
@@ -47,8 +46,8 @@ const authController = {
 				console.log('Here', userExists[0].password);
 				console.log('Entered Passwd', dataObj.password);
 				try {
-					dataObj.password;
-					const validPasswd = await bcrypt.compare(dataObj.password, userExists[0].password);
+					dataObj.password && (dataObj.password).length > 0
+					const validPasswd = bcrypt.compare(dataObj.password, userExists[0].password);
 					console.log('Valid', validPasswd);
 					if (validPasswd) {
 						const token = generateToken(dataObj.id, dataObj.email);
@@ -79,7 +78,7 @@ const authController = {
 		}
 	},
 
-	async deleteUsers(req, res) {
+	async deleteUsers(req) {
 		const dataObj = req.body;
 		try {
 			const deletedUser = await authService.deleteUser(dataObj);

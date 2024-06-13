@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
 
 const server = require('http').createServer(app);
 const path = require('path');
@@ -35,7 +34,7 @@ app.set('views', path.join(__dirname, '/views/'));
 
 
 
-app.options('/*', (req, res, next) => {
+app.options('/*', (req, res) => {
 	res.header('Access-Control-Allow-Origin', api_link);
 	res.header('Access-Control-Allow-Credentials', true);
 	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
@@ -79,7 +78,7 @@ app.get('/500', (req, res, next) => {
 	next(new Error('Something went wrong'));
 });
 
-app.use((req, res, next) => {
+app.use((req, res) => {
 	res.status(404);
 	res.format({
 		// Html: function () {
@@ -94,7 +93,7 @@ app.use((req, res, next) => {
 	});
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
 	err = err.toString();
 	res.status(err.status || 500);
 

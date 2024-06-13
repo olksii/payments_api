@@ -1,8 +1,12 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const multer = require('multer');
 const {paymentController} = require('../controllers/payment_controller.js');
 const router = express.Router();
 const {middleware} = require('../middleware/middleware.js');
+
+const serverUrl = process.env.FILE_STORAGE_SERVER_IP;
+const filePath = process.env.FILE_STORAGE_LOCATION_PATH;
 // Const link = '//192.168.23.91/Payments'
 
 // const link = '//192.168.23.91/'
@@ -44,12 +48,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-router.post(`${api_link}/payment`, upload.single('file'), (req, res) => {
-	console.log('This is workin!');
+router.post(`${api_link}/payment`, upload.single('file'), (req, res, next) => {
 	const {body} = req;
 	const {file} = req;
-	console.log('file', file);
-	console.log('body', body);
 
 	const OBJjavascript = JSON.parse(JSON.stringify(body));
 
@@ -62,53 +63,55 @@ router.post(`${api_link}/payment`, upload.single('file'), (req, res) => {
 		filename = 'no_file';
 	}
 
+	// if (OBJjavascript.hasOwnProperty('contractor_id')) {
+	// 	paymentController.createPayment(req, res, filename);
+	// } else {
+	// 	paymentController.createPaymentContractorRepresentativeContractor(req, res, filename);
+	// }
 	if (OBJjavascript.hasOwnProperty('contractor_id')) {
-		paymentController.createPayment(req, res, filename);
+		paymentController.createPayment(req, res, filename).catch(next);
 	} else {
-		paymentController.createPaymentContractorRepresentativeContractor(req, res, filename);
+		paymentController.createPaymentContractorRepresentativeContractor(req, res, filename).catch(next);
 	}
+	
+
 
 	// PaymentController.getPayments(req, res)
 });
 
 // Get all payments
-router.get(`${api_link}/payments`, middleware.paginateRequest(), (req, res) => {
-	paymentController.getPayments(req, res);
+router.get(`${api_link}/payments`, middleware.paginateRequest(), (req, res, next) => {
+	paymentController.getPayments(req, res).catch(next);
 });
 // Get payment by id
-router.get(`${api_link}/payment/:id`, (req, res) => {
+router.get(`${api_link}/payment/:id`, (req, res, next) => {
 	let sortField = req.query.sort || 'created_at';
 	let sortOrder = (req.query.order || 'DESC').toUpperCase();
-	console.log('req', req.params.id);
-	console.log('This')
-	paymentController.getPaymentById(req, res, sortField, sortOrder);
+	paymentController.getPaymentById(req, res, sortField, sortOrder).catch(next);
 });
 //Get all payments by userid 
-router.get(`${api_link}/payments/:id`, middleware.paginateRequest(), (req, res, ) => {
-	paymentController.getPaymentsByUserId(req, res);
+router.get(`${api_link}/payments/:id`, middleware.paginateRequest(), (req, res, next) => {
+	paymentController.getPaymentsByUserId(req, res).catch(next);
 });
 
-router.delete(`${api_link}/payments/:id`, (req, res) => {
-	console.log('This triggers');
-	paymentController.deletePayment(req, res);
+router.delete(`${api_link}/payments/:id`, (req, res, next) => {
+	paymentController.deletePayment(req, res).catch(next);
 });
 
-router.put(`${api_link}/payments/:id`, upload.single('file'), (req, res) => {
-	const {body} = req;
+router.put(`${api_link}/payments/:id`, upload.single('file'), (req, res, next) => {
 	const {file} = req;
 	if (file) {
 		console.log('File exists');
-		const filelink = link + '/' + file.originalname;
 	} else {
 		console.log('No file');
 		filename = 'no_file';
 	}
 
-	paymentController.editPayment(req, res, filename);
+	paymentController.editPayment(req, res, filename).catch(next);
 });
 
-router.put(`${api_link}/payment_change_status/:id`, (req, res) => {
-	paymentController.editPaymentStatus(req, res);
+router.put(`${api_link}/payment_change_status/:id`, (req, res, next) => {
+	paymentController.editPaymentStatus(req, res).catch(next);
 });
 
 module.exports = router;

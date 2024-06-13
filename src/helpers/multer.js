@@ -1,6 +1,6 @@
 const multer = require('multer');
 
-const filepath2 = 'C:/Users/Lexus/Documents/test_files_storage';
+
 const filepath = 'C:/Users/derek/Desktop/Unison Payments/payment_files';
 
 let filename = '';
