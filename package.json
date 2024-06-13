@@ -20,7 +20,7 @@
   "author": "Oleksii Yali",
   "license": "ISC",
   "engines": {
-    "node": "14.18.1"
+    "node": "22.3.0"
   },
   "dependencies": {
     "babel-core": "^4.7.16",
