@@ -21,7 +21,6 @@ const {middleware} = require('./middleware/middleware');
 const PORT = 8777;
 
 const api_link = 'http://localhost';
-// const api_link = 'http://payit.uni.com.ua';
 
 
 
