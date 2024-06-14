@@ -5,12 +5,12 @@ const {documentStatusController} = require('../controllers/document_status_contr
 
 const api_link = '/api/3.0';
 
-router.get(`${api_link}/documentstatus`, (req, res) => {
-	documentStatusController.getDocumentStatus(req, res);
+router.get(`${api_link}/documentstatus`, (req, res, next) => {
+	documentStatusController.getDocumentStatus(req, res).catch(next);
 });
 
-router.post(`${api_link}/documentstatus`, (req, res) => {
-	documentStatusController.addDocumentStatus(req, res);
+router.post(`${api_link}/documentstatus`, (req, res, next) => {
+	documentStatusController.addDocumentStatus(req, res).catch(next);
 });
 
 module.exports = router;

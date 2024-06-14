@@ -4,29 +4,26 @@ const paymentTypeModel = {
 
 	async createPaymentType(requestData) {
 		try {
-			const newPaymentType = await PaymentType.create({
+			 return await PaymentType.create({
 				name: requestData.name,
 				description: requestData.description,
 			});
-			return (newPaymentType);
 		} catch (error) {
-			return ('Model', error);
+			return (error);
 		}
 	},
 	async getPaymentTypes() {
 		try {
-			const allPaymentTypes = await PaymentType.findAll({where: {enabled: true}});
-			return allPaymentTypes;
+			return await PaymentType.findAll({where: {enabled: true}});
 		} catch (error) {
-			return ('Model', error);
+			return (error);
 		}
 	},
 	async getPaymentTypeById(requestData) {
 		try {
-			const paymentType = await PaymentType.findOne({where: {enabled: true, id: requestData.id}});
-			return paymentType;
+			return await PaymentType.findOne({where: {enabled: true, id: requestData.id}});
 		} catch (error) {
-			return ('Model', error);
+			return (error);
 		}
 	},
 

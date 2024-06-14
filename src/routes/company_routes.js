@@ -5,12 +5,12 @@ const {companyController} = require('../controllers/company_controller.js');
 
 const api_link = '/api/3.0';
 
-router.get(`${api_link}/company`, (req, res) => {
-	companyController.getCompanies(req, res);
+router.get(`${api_link}/company`, (req, res, next) => {
+	companyController.getCompanies(req, res).catch(next);
 });
 
-router.post(`${api_link}/company`, (req, res) => {
-	companyController.createCompany(req, res);
+router.post(`${api_link}/company`, (req, res, next) => {
+	companyController.createCompany(req, res).catch(next);
 });
 
 module.exports = router;
