@@ -16,7 +16,7 @@ const contractorService = {
 				return (newContractor);
 			}
 		} catch (error) {
-			return (error);
+			throw (error);
 		}
 	},
 
