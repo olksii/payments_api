@@ -10,7 +10,7 @@ const contractorService = {
 					number: 409,
 					msg: {conractor: 'Contractor already exists'},
 				};
-				throw new Error (error_content);
+				return (error_content);
 			} else {
 				const newContractor = await contractorModel.createContractor(requestData);
 				return (newContractor);
