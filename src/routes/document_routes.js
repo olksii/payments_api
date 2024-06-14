@@ -10,7 +10,7 @@ router.get(`${api_link}/documentstatus`, (req, res, next) => {
 });
 
 router.post(`${api_link}/documentstatus`, (req, res, next) => {
-	documentStatusController.addDocumentStatus(req, res).catch(next);
+	documentStatusController.addDocumentStatus(req, res).catch(next );
 });
 
 module.exports = router;
