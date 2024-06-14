@@ -6,17 +6,17 @@ const contractorService = {
 		try {
 			const checkContractorInn = await contractorModel.getContractorByInn(requestData);
 			if (checkContractorInn.lenght > 0) {
-				const error_content = {
+				const errorContent = {
 					number: 409,
 					msg: {conractor: 'Contractor already exists'},
 				};
-				throw new Error (error_content);
+				throw new Error (errorContent);
 			} else {
 				const newContractor = await contractorModel.createContractor(requestData);
 				return (newContractor);
 			}
 		} catch (error) {
-			return (error);
+			throw (error);
 		}
 	},
 
