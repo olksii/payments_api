@@ -5,7 +5,7 @@ const server = require('http').createServer(app);
 const path = require('path');
 
 require('./db/associations.js');
-require('./testdb.js');
+
 
 const paymentRoutes = require('./routes/payment_routes');
 const authRoutes = require('./routes/auth_routes');
