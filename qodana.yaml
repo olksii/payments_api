@@ -7,3 +7,5 @@ linter: jetbrains/qodana-js
 bootstrap: |
   composer install
   npm install 
+
+fixesStrategy: apply
