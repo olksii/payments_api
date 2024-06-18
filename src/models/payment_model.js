@@ -14,7 +14,7 @@ const {Currency} = require('../db/schemas/currency_schema.js');
 const link = 'C:/Users/derek/Desktop/Unison Payments/payment_files/';
 
 const paymentModel = {
-
+	
 	async getPayments(list) {
 		const {sortField, sortOrder, filter, page, limit} = list;
 		try {

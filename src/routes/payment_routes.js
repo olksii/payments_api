@@ -80,9 +80,15 @@ router.post(`${api_link}/payment`, upload.single('file'), (req, res, next) => {
 });
 
 // Get all payments
+// router.get(`${api_link}/payments`, middleware.paginateRequest(), (req, res, next) => {
+// 	paymentController.getPayments(req, res).catch(next);
+// });
+
+// Get all payments2
 router.get(`${api_link}/payments`, middleware.paginateRequest(), (req, res, next) => {
 	paymentController.getPayments(req, res).catch(next);
 });
+
 // Get payment by id
 router.get(`${api_link}/payment/:id`, (req, res, next) => {
 	let sortField = req.query.sort || 'created_at';

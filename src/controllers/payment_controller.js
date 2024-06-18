@@ -41,9 +41,19 @@ const paymentController = {
 	},
 
 	async getPayments(req, res) {
+		const role = req.user.role;
 		let list = req.list;
+		let payments;
+
 		try {
-			const payments = await paymentService.getPayments(list);
+			if(role === 'admin' || role === 'boss' || role === 'accountant'){
+				 payments = await paymentService.getPayments(list);
+			}
+			else{
+				list.id = req.user.id
+				payments = await paymentService.getPaymentsByUserId(list);
+			}
+			
 			const length = payments.length;
 			const pages = Math.ceil(length/req.list.limit)
 			const response = {
