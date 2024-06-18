@@ -2,8 +2,11 @@ version: "1.0"
 profile:
   name: qodana.recommended
 
-linter: jetbrains/qodana-js
+linter: jetbrains/qodana-js:2024.1
 
 bootstrap: |
   composer install
   npm install 
+  
+include:
+    - name: Eslint

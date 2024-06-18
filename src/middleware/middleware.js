@@ -31,6 +31,8 @@ const middleware = {
 				if (!token) {
 					return res.status(403).json({message: 'User1 is not authorized'});
 				}
+				const deco = jwt.verify(token, process.env.SECRET_KEY);
+				console.log('Deco', deco)
 				req.user = jwt.verify(token, process.env.SECRET_KEY);
 				next();
 			} catch (error) {

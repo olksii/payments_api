@@ -41,16 +41,13 @@ const authController = {
 
 		try {
 			const userExists = await authService.findUser(dataObj);
-			console.log('User', userExists);
 			if (userExists.length > 0) {
-				console.log('Here', userExists[0].password);
-				console.log('Entered Passwd', dataObj.password);
 				try {
 					dataObj.password && (dataObj.password).length > 0
 					const validPasswd = bcrypt.compare(dataObj.password, userExists[0].password);
 					console.log('Valid', validPasswd);
 					if (validPasswd) {
-						const token = generateToken(dataObj.id, dataObj.email);
+						const token = generateToken(userExists[0].id, userExists[0].email, userExists[0].role_id);
 						console.log('TOKEN IS', token);
 						res.send(JSON.stringify({token, user: userExists[0]}));
 					} else {
