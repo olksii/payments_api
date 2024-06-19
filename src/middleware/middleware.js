@@ -82,6 +82,9 @@ const middleware = {
 	},
 	paginateRequest() {
 		return(req, res, next) => {
+			const body = req.body;
+			console.log('Body is', body)
+			
 			const {id} = req.params;
 			const sortField = req.query.sort || 'created_at';
 			const sortOrder = (req.query.order || 'DESC').toUpperCase();
