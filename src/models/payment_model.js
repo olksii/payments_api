@@ -12,16 +12,18 @@ const {Currency} = require('../db/schemas/currency_schema.js');
 
 
 const link = 'C:/Users/derek/Desktop/Unison Payments/payment_files/';
-
+//payment_initiator:[{id:'919426e6-5a64-4f61-8f7e-5a4a672847d7'}]
 const paymentModel = {
 	
 	async getPayments(list) {
-		const {sortField, sortOrder, filter, page, limit} = list;
+		console.log('List', list)
+		const {sortField, sortOrder, filter, currentPage, limitItems} = list;
+
 		try {
 			return await Payment.findAll({
-				where: {enabled: true, ...filter},
+				where: {enabled: true, },
 				include: [
-					{model: UserOffice, as: 'payment_initiator'},
+					{model: UserOffice, as: 'payment_initiator', where:{id:'919426e6-5a64-4f61-8f7e-5a4a672847d7'}},
 					{model: Company},
 					{model: PaymentStatus, as: 'payment_status'},
 					{model: DocumentStatus, as: 'document_status'},
@@ -35,8 +37,8 @@ const paymentModel = {
 					},
 				],
 				order: [[sortField, sortOrder]],
-				offset:((page-1)*limit),
-				limit:limit,
+				offset:((currentPage-1)*limitItems),
+				limit:limitItems,
 			});
 		} catch (error) {
 			console.log('err', error);
@@ -71,10 +73,12 @@ const paymentModel = {
 	},
 
 	async getPaymentsByUserId(list) {
-		const {sortField, sortOrder, filter, id, page, limit} = list;
+		console.log('list2', list)
+		const {sortField, sortOrder, filter, id, currentPage, limitItems} = list;
+
 		try {
 			return await Payment.findAll({
-				where: {enabled: true, payment_initiator_id:id, ...filter},
+				where: {enabled: true, payment_initiator_id:id, },
 				include: [
 					{model: UserOffice, as: 'payment_initiator'},
 					{model: Company},
@@ -90,8 +94,8 @@ const paymentModel = {
 					},
 				],
 				order: [[sortField, sortOrder]],
-				offset:((page-1)*limit),
-				limit:limit
+				offset:((currentPage-1)*limitItems),
+				limit:limitItems
 			});
 		} catch (error) {
 			console.log('err', error);

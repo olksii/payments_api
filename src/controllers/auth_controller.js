@@ -45,7 +45,7 @@ const authController = {
 				try {
 					dataObj.password && (dataObj.password).length > 0
 					const validPasswd = bcrypt.compare(dataObj.password, userExists[0].password);
-					console.log('Valid', validPasswd);
+					console.log('Valid111', validPasswd);
 					if (validPasswd) {
 						const token = generateToken(userExists[0].id, userExists[0].email, userExists[0].role_id);
 						console.log('TOKEN IS', token);

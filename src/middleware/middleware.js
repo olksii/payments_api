@@ -82,32 +82,46 @@ const middleware = {
 	},
 	paginateRequest() {
 		return(req, res, next) => {
-			const body = req.body;
-			console.log('Body is', body)
+
+			const userData = req.user;
+			const paginationData = req.body.pageable;
+
+			const id = userData.id;
+
+			const sortField = paginationData.sort.sortField || 'created_at';
+			const sortOrder = (paginationData.sort.sortOrder || 'DESC').toUpperCase();
+
 			
-			const {id} = req.params;
-			const sortField = req.query.sort || 'created_at';
-			const sortOrder = (req.query.order || 'DESC').toUpperCase();
-			const page = req.query.page || 1;
-			const limit = req.query.limit || 5;
+			const currentPage = paginationData.currentPage || 1;
+			const limitItems = paginationData.limit || 5;
+			const rangeFilter = paginationData.rangeFilter || null;
+			const searchFilter = paginationData.search || null;
+
+
 			const list = {};
+
 			const filter = {};
 	
-			if(req.query){
-				Object.keys(req.query).forEach((name) =>{
+			if(paginationData.filter){
+				Object.keys(paginationData.filter).forEach((name) =>{
 					if(name !== 'sort' && name !== 'order' && name !=='page' && name !=='limit'){
-						filter[name]=req.query[name]
+						filter[name]=paginationData.filter[name]
 					}
 				})
 			}
+			
+
+
 			list.sortField = sortField;
 			list.sortOrder = sortOrder;
-			list.page = page;
-			list.limit = limit;
+			list.currentPage = currentPage;
+			list.limitItems = limitItems;
 			list.filter = filter;
-			list.id = id;
+			list.rangeFilter = rangeFilter;
+			list.userId = id;
+			list.searchFilter = searchFilter;
+
 			req.list = list;
-			
 
 			next()
 		}

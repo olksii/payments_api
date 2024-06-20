@@ -42,7 +42,7 @@ const paymentController = {
 
 	async getPayments(req, res) {
 		const role = req.user.role;
-		let list = req.list;
+		const list = req.list;
 		let payments;
 
 		try {
@@ -56,6 +56,7 @@ const paymentController = {
 			
 			const length = payments.length;
 			const pages = Math.ceil(length/req.list.limit)
+			
 			const response = {
 				total_items:length,
 				total_pages:pages,
