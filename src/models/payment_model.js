@@ -18,21 +18,21 @@ const paymentModel = {
 	async getPayments(list) {
 		console.log('List', list)
 		const {sortField, sortOrder, filter, currentPage, limitItems} = list;
-
+		const emptyObj = ''
 		try {
 			return await Payment.findAll({
 				where: {enabled: true, },
 				include: [
-					{model: UserOffice, as: 'payment_initiator', where:{id:'919426e6-5a64-4f61-8f7e-5a4a672847d7'}},
-					{model: Company},
-					{model: PaymentStatus, as: 'payment_status'},
-					{model: DocumentStatus, as: 'document_status'},
-					{model: Currency, as: 'currency'},
-					{model: PaymentType, as: 'payment_type'},
+					{model: UserOffice, as: 'paymentInitiator', where:{emptyObj}},
+					{model: Company, as:'companyPayer', where:{emptyObj}},
+					{model: PaymentStatus, as: 'paymentStatus', where:{emptyObj}},
+					{model: DocumentStatus, as: 'documentStatus', where:{}},
+					{model: Currency, as: 'currency', where:{}},
+					{model: PaymentType, as: 'paymentType', where:{}},
 					{
-						model: Contractor, as: 'contractor',
+						model: Contractor, as: 'contractor', where:{},
 						include: [
-							{model: RepresentativeContractor, as: 'representative_contractor'},
+							{model: RepresentativeContractor, as: 'representativeContractor',where:{}},
 						],
 					},
 				],

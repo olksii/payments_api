@@ -51,8 +51,8 @@ const middleware = {
 
 				next();
 			} catch (error) {
-				console.log('ERError is', error);
-				return res.status(403).json({message: 'User2 is not authorized'});
+				console.log('Error, user is not authorized! Token has been compromised');
+				return res.status(403).json({message: 'User is not authorized. Token has been compromised'});
 			}
 		} else {
 			console.error('User is not authorized');

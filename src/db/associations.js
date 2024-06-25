@@ -16,41 +16,41 @@ const {DocumentStatus} = require('./schemas/document_status_schema.js');
 // One-to-Many========================================================
 
 // Payment belongs to one user(creator), User has many payments;
-UserOffice.hasMany(Payment, {foreignKey: {name: 'payment_initiator_id', allowNull: false}, as: 'payment_initiator'});
-Payment.belongsTo(UserOffice, {foreignKey: {name: 'payment_initiator_id', allowNull: false}, as: 'payment_initiator'});
+UserOffice.hasMany(Payment, {foreignKey: {name: 'payment_initiator_id', allowNull: false}, as: 'paymentInitiator'});
+Payment.belongsTo(UserOffice, {foreignKey: {name: 'payment_initiator_id', allowNull: false}, as: 'paymentInitiator'});
 
 // Payment belongs to one user(someone who approved payment), User has many payments;
-UserOffice.hasMany(Payment, {foreignKey: {name: 'approved_by_id', allowNull: true}, as: 'payment_approval'});
-Payment.belongsTo(UserOffice, {foreignKey: {name: 'approved_by_id', allowNull: true}, as: 'payment_approval'});
+UserOffice.hasMany(Payment, {foreignKey: {name: 'approved_by_id', allowNull: true}, as: 'paymentApproval'});
+Payment.belongsTo(UserOffice, {foreignKey: {name: 'approved_by_id', allowNull: true}, as: 'paymentApproval'});
 
 // User belongs to one role, Role has many users;
 Role.hasMany(UserOffice, {foreignKey: 'role_id', allowNull: false});
 UserOffice.belongsTo(Role, {foreignKey: 'role_id', allowNull: false});
 
 // Payment belongs to one company. Company has many payments;
-Payment.belongsTo(Company, {foreignKey: {name: 'payer_company_id', allowNull: false}});
-Company.hasMany(Payment, {foreignKey: {name: 'payer_company_id', allowNull: false}});
+Payment.belongsTo(Company, {foreignKey: {name: 'payer_company_id', allowNull: false}, as:'companyPayer'});
+Company.hasMany(Payment, {foreignKey: {name: 'payer_company_id', allowNull: false}, as: 'companyPayer'});
 
 // Payment belongs to one currency. Currency has many payments;
 Payment.belongsTo(Currency, {foreignKey: {name: 'currency_id', allowNull: false}, as: 'currency'});
 Currency.hasMany(Payment, {foreignKey: {name: 'currency_id', allowNull: false}, as: 'currency'});
 
 // Payment belongs to one PaymentStatus, PaymentStatus has many Payments;
-Payment.belongsTo(PaymentStatus, {foreignKey: {name: 'status_id', allowNull: false}, as: 'payment_status'});
-PaymentStatus.hasMany(Payment, {foreignKey: {name: 'status_id', allowNull: false}, as: 'payment_status'});
+Payment.belongsTo(PaymentStatus, {foreignKey: {name: 'status_id', allowNull: false}, as: 'paymentStatus'});
+PaymentStatus.hasMany(Payment, {foreignKey: {name: 'status_id', allowNull: false}, as: 'paymentStatus'});
 
-Payment.belongsTo(PaymentType, {foreignKey: {name: 'payment_type_id', allowNull: false}, as: 'payment_type'});
-PaymentType.hasMany(Payment, {foreignKey: {name: 'payment_type_id', allowNull: false}, as: 'payment'});
+Payment.belongsTo(PaymentType, {foreignKey: {name: 'payment_type_id', allowNull: false}, as: 'paymentType'});
+PaymentType.hasMany(Payment, {foreignKey: {name: 'payment_type_id', allowNull: false}, as: 'paymentType'});
 
 // Payment belongs to one Contractor, Contractor has many Payments;
 Payment.belongsTo(Contractor, {foreignKey: {name: 'contractor_id', allowNull: false}, as: 'contractor'});
-Contractor.hasMany(Payment, {foreignKey: {name: 'contractor_id', allowNull: false}, as: 'payment'});
+Contractor.hasMany(Payment, {foreignKey: {name: 'contractor_id', allowNull: false}, as: 'contractor'});
 
-Payment.belongsTo(DocumentStatus, {foreignKey: {name: 'document_status_id', allowNull: true}, as: 'document_status'});
-DocumentStatus.hasMany(Payment, {foreignKey: {name: 'document_status_id', allowNull: true}, as: 'document_status'});
+Payment.belongsTo(DocumentStatus, {foreignKey: {name: 'document_status_id', allowNull: true}, as: 'documentStatus'});
+DocumentStatus.hasMany(Payment, {foreignKey: {name: 'document_status_id', allowNull: true}, as: 'documentStatus'});
 
-Contractor.belongsTo(RepresentativeContractor, {foreignKey: {name: 'representative_contractor_id', allowNull: false}, as: 'representative_contractor'});
-RepresentativeContractor.hasMany(Contractor, {foreignKey: {name: 'representative_contractor_id', allowNull: false}, as: 'representative_contractor'});
+Contractor.belongsTo(RepresentativeContractor, {foreignKey: {name: 'representative_contractor_id', allowNull: false}, as: 'representativeContractor'});
+RepresentativeContractor.hasMany(Contractor, {foreignKey: {name: 'representative_contractor_id', allowNull: false}, as: 'representativeContractor'});
 
 // Many-to-Many================================================================================================================================================================
 const UserOfficeCompany = sequelize.define('UserOfficeCompany', {}, {
