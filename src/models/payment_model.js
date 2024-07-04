@@ -17,15 +17,16 @@ const paymentModel = {
 	
 	async getPayments(list) {
 		console.log('List', list)
+		console.log('filter', list.filter)
 		const {sortField, sortOrder, filter, currentPage, limitItems} = list;
-		const emptyObj = ''
+		console.log('Filter', filter)
 		try {
 			return await Payment.findAll({
-				where: {enabled: true, },
+				where: {enabled: true, ...filter},
 				include: [
-					{model: UserOffice, as: 'paymentInitiator', where:{emptyObj}},
-					{model: Company, as:'companyPayer', where:{emptyObj}},
-					{model: PaymentStatus, as: 'paymentStatus', where:{emptyObj}},
+					{model: UserOffice, as: 'paymentInitiator', where:{}},
+					{model: Company, as:'companyPayer', where:{}},
+					{model: PaymentStatus, as: 'paymentStatus', where:{}},
 					{model: DocumentStatus, as: 'documentStatus', where:{}},
 					{model: Currency, as: 'currency', where:{}},
 					{model: PaymentType, as: 'paymentType', where:{}},
@@ -104,6 +105,7 @@ const paymentModel = {
 	},
 
 	async createPayment(requestData, filename) {
+		console.log('New req data is', requestData)
 		try {
 			const newPayment = await Payment.create({
 				subject: requestData.subject,
@@ -131,7 +133,7 @@ const paymentModel = {
 			return newPayment;
 		} catch (error) {
 			console.log('Eror1', error);
-			throw new Error (`Error-model:${error}`);
+			return (`Error-model:${error}`);
 		}
 	},
 	async createPaymentContractor() {
