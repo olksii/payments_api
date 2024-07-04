@@ -18,11 +18,33 @@ const paymentModel = {
 	async getPayments(list) {
 		console.log('List', list)
 		console.log('filter', list.filter)
-		const {sortField, sortOrder, filter, currentPage, limitItems} = list;
-		console.log('Filter', filter)
+		const {sortField, sortOrder, filter, currentPage, limitItems, rangeFilter} = list;
+
+		let whereObjParams = {
+			enabled:true
+		}
+		let orderArray =[];
+		
+		if(Object.keys(filter).length > 0){
+			for(key in filter){
+				whereObjParams[key] = filter[key]
+			}
+		}
+		if((rangeFilter).length > 0){
+			rangeFilter.forEach(filterObject => {
+				console.log("Object is",  filterObject)
+				// whereObjParams[filterObject.field_name] = rangeFilter[index]
+			});
+			console.log('Where params', whereObjParams)
+		}
+		if(sortField&&sortOrder){
+			orderArray = [sortField, sortOrder]
+		}
+
+
 		try {
 			return await Payment.findAll({
-				where: {enabled: true, ...filter},
+				where: whereObjParams,
 				include: [
 					{model: UserOffice, as: 'paymentInitiator', where:{}},
 					{model: Company, as:'companyPayer', where:{}},
@@ -37,7 +59,7 @@ const paymentModel = {
 						],
 					},
 				],
-				order: [[sortField, sortOrder]],
+				order: [orderArray],
 				offset:((currentPage-1)*limitItems),
 				limit:limitItems,
 			});
