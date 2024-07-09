@@ -10,59 +10,83 @@ const {DocumentStatus} = require('../db/schemas/document_status_schema.js');
 const {PaymentType} = require('../db/schemas/payment_type_schema.js');
 const {Currency} = require('../db/schemas/currency_schema.js');
 
+const {Op} = require('sequelize');
 
-const link = 'C:/Users/derek/Desktop/Unison Payments/payment_files/';
-//payment_initiator:[{id:'919426e6-5a64-4f61-8f7e-5a4a672847d7'}]
+
+
 const paymentModel = {
-	
-	async getPayments(list) {
-		console.log('List', list)
-		console.log('filter', list.filter)
-		const {sortField, sortOrder, filter, currentPage, limitItems, rangeFilter} = list;
+
+	async getPayments(filter, sortField, sortOrder, list) {
+		console.log('ALL', filter, sortField, sortOrder)
+		console.log("ALL LIST", list)
+		const rangeFilter = list.rangeFilter[0];
+
+		let rangeFilterArray = list.rangeFilter;
+		console.log('Range Filter', rangeFilter)
 
 		let whereObjParams = {
-			enabled:true
+			enabled:true,
+			
+			expiration_date:{
+				[Op.between]:['2023-04-26', '2024-05-01']
+			},
+			
 		}
 		let orderArray =[];
 		
+
 		if(Object.keys(filter).length > 0){
 			for(key in filter){
 				whereObjParams[key] = filter[key]
 			}
 		}
-		if((rangeFilter).length > 0){
-			rangeFilter.forEach(filterObject => {
-				console.log("Object is",  filterObject)
-				// whereObjParams[filterObject.field_name] = rangeFilter[index]
-			});
-			console.log('Where params', whereObjParams)
-		}
 		if(sortField&&sortOrder){
 			orderArray = [sortField, sortOrder]
 		}
 
+		if(Object.keys(rangeFilter).length > 0){
 
+			for(key in rangeFilter){
+				console.log('KEY', key);
+				console.log('Value', rangeFilter[key])
+				if(key === 'fild_name'){
+					
+				}
+				
+			}
+		}
+		let objects = rangeFilterArray.map((elem, index) => {
+			console.log('Elem', elem)
+			let newObject = {};
+			let nameKey = elem.field_name;
+			newObject[nameKey]= {[`Op.${elem.filter_type}`]:[`${elem.start}, ${elem.end}`]};
+			  
+			return(newObject)
+		})
+		console.log('Objects', objects[0])
+		
+		
+		console.log('Where obj params', whereObjParams)		
 		try {
-			return await Payment.findAll({
+			const payments = await Payment.findAll({
 				where: whereObjParams,
-				include: [
-					{model: UserOffice, as: 'paymentInitiator', where:{}},
-					{model: Company, as:'companyPayer', where:{}},
-					{model: PaymentStatus, as: 'paymentStatus', where:{}},
-					{model: DocumentStatus, as: 'documentStatus', where:{}},
-					{model: Currency, as: 'currency', where:{}},
-					{model: PaymentType, as: 'paymentType', where:{}},
-					{
-						model: Contractor, as: 'contractor', where:{},
-						include: [
-							{model: RepresentativeContractor, as: 'representativeContractor',where:{}},
-						],
-					},
-				],
+				// include: [
+				// 	{model: UserOffice, as: 'payment_initiator'},
+				// 	{model: Company},
+				// 	{model: PaymentStatus, as: 'payment_status'},
+				// 	{model: DocumentStatus, as: 'document_status'},
+				// 	{model: Currency, as: 'currency'},
+				// 	{model: PaymentType, as: 'payment_type'},
+				// 	{
+				// 		model: Contractor, as: 'contractor',
+				// 		include: [
+				// 			{model: RepresentativeContractor, as: 'representative_contractor'},
+				// 		],
+				// 	},
+				// ],
 				order: [orderArray],
-				offset:((currentPage-1)*limitItems),
-				limit:limitItems,
 			});
+			return payments;
 		} catch (error) {
 			console.log('err', error);
 			return error;
@@ -71,7 +95,7 @@ const paymentModel = {
 
 	async getPaymentById(id) {
 		try {
-			return await Payment.findAll({
+			const payment = await Payment.findOne({
 				where: {enabled: true, id:id},
 				include: [
 					{model: UserOffice, as: 'payment_initiator'},
@@ -87,21 +111,43 @@ const paymentModel = {
 						],
 					},
 				],
-				order: [[sortField, sortOrder]],
 			});
+			return payment;
 		} catch (error) {
 			console.log('err', error);
 			return error;
 		}
 	},
 
-	async getPaymentsByUserId(list) {
-		console.log('list2', list)
-		const {sortField, sortOrder, filter, id, currentPage, limitItems} = list;
+	// async getPaymentsByUserId2(id) {
+	// 	try {
+	// 		const payments = await Payment.findAll({where: {payment_initiator_id: id}, include: [{model: UserOffice, as: 'payment_initiator'}, {model: Company}]});
+	// 		return payments;
+	// 	} catch (error) {
+	// 		return error;
+	// 	}
+	// },
+	async getPaymentsByUserId(id, filter, sortField, sortOrder ) {
+		console.log('User id', id)
+		console.log("Filter is", filter)
+		let whereObjParams = {
+			enabled:true
+		}
+		let orderArray =[];
+		if(Object.keys(filter).length > 0){
+			console.log('Filter workds')
+			for(key in filter){
+				whereObjParams[key] = filter[key]
+			}
+		}
+		if(sortField&&sortOrder){
+			orderArray = [sortField, sortOrder]
+		}
+		whereObjParams.payment_initiator_id = id
 
 		try {
-			return await Payment.findAll({
-				where: {enabled: true, payment_initiator_id:id, },
+			const payments = await Payment.findAll({
+				where: whereObjParams,
 				include: [
 					{model: UserOffice, as: 'payment_initiator'},
 					{model: Company},
@@ -116,18 +162,16 @@ const paymentModel = {
 						],
 					},
 				],
-				order: [[sortField, sortOrder]],
-				offset:((currentPage-1)*limitItems),
-				limit:limitItems
+				order: [orderArray],
 			});
+			return payments;
 		} catch (error) {
 			console.log('err', error);
 			return error;
 		}
 	},
 
-	async createPayment(requestData, filename) {
-		console.log('New req data is', requestData)
+	async createPayment(requestData, filelink) {
 		try {
 			const newPayment = await Payment.create({
 				subject: requestData.subject,
@@ -138,7 +182,7 @@ const paymentModel = {
 				sum_to_pay: requestData.sum_to_pay,
 				sum_left: requestData.sum_left,
 				expiration_date: requestData.expiration_date,
-				file_link: filename,
+				file_link: filelink,
 				comment: requestData.comment,
 				trip_route: requestData.trip_route,
 				trip_number: requestData.trip_number,
@@ -155,14 +199,13 @@ const paymentModel = {
 			return newPayment;
 		} catch (error) {
 			console.log('Eror1', error);
-			return (`Error-model:${error}`);
+			throw ('Error-model', error);
 		}
 	},
 	async createPaymentContractor() {
 
 	},
-	async createPaymentContractorRepresentativeContractor(requestData, filename) {
-		console.log('This is requestdata2', requestData);
+	async createPaymentContractorRepresentativeContractor(requestData, filelink) {
 		try {
 			const newPayment = await Payment.create({
 				subject: requestData.subject,
@@ -173,7 +216,7 @@ const paymentModel = {
 				sum_to_pay: requestData.sum_to_pay,
 				sum_left: requestData.sum_left,
 				expiration_date: requestData.expiration_date,
-				file_link: filename,
+				file_link: filelink,
 				comment: requestData.comment,
 				trip_route: requestData.trip_route,
 				trip_number: requestData.trip_number,
@@ -199,25 +242,16 @@ const paymentModel = {
 				include: [{model: Contractor, as: 'contractor', include: [{model: RepresentativeContractor, as: 'representative_contractor'}]}],
 			},
 			);
-			return (newPayment);
+			return ('newPayment', newPayment);
 		} catch (error) {
 			console.log('Eror2', error);
-			throw new Error (`Error-model:${error}`);
+			throw ('Error-model', error);
 		}
 	},
 
 	async deletePayment(id) {
-		let deletedPayment;
 		try {
-			deletedPayment = await Payment.findAll({where: {id}});
-			console.log('payemnt is', deletedPayment[0].file_link);
-			if (deletedPayment[0].file_link !== 'no_file') {
-				const file = link + deletedPayment[0].file_link;
-				console.log('File', file);
-				fs.unlinkSync(file);
-			}
-
-			deletedPayment = await Payment.destroy({where: {id}});
+			const deletedPayment = await Payment.destroy({where: {id}});
 			return deletedPayment;
 		} catch (error) {
 			return error;

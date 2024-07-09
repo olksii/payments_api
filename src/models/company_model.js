@@ -4,7 +4,8 @@ const companyModel = {
 
 	async getCompanies() {
 		try {
-			return await Company.findAll();
+			const allCompanies = await Company.findAll();
+			return allCompanies;
 		} catch (error) {
 			return error;
 		}
@@ -12,7 +13,8 @@ const companyModel = {
 
 	async addNewCompany(dataObj) {
 		try {
-			return await Company.create({company_name: dataObj.name, company_INN: dataObj.INN});
+			const newCompany = await Company.create({company_name: dataObj.name, company_INN: dataObj.INN});
+			return newCompany;
 		} catch (error) {
 			return error;
 		}

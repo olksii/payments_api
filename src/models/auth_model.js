@@ -7,45 +7,57 @@ const bcrypt = require('bcrypt');
 const authModel = {
 
 	async registerNewUser(dataObj) {
-		dataObj.password = bcrypt.hashSync(dataObj.password, 7);
+		const hashPassword = bcrypt.hashSync(dataObj.password, 7);
+		dataObj.password = hashPassword;
 		try {
-			return await UserOffice.create({
+			console.log('data obj is ', dataObj);
+			const newUser = await UserOffice.create({
 				username: dataObj.name, email: dataObj.email, password: dataObj.password, role_id: dataObj.role_id,
 			});
+			console.log('New User', newUser);
+			return newUser;
 		} catch (error) {
+			console.log('New User error', error);
 			return error;
 		}
 	},
 	async checkUsersEmail(dataObj) {
 		try {
-			return await UserOffice.findAll({where: {email: dataObj.email}, include: Role});
+			const foundUser = await UserOffice.findAll({where: {email: dataObj.email}, include: Role});
+			return foundUser;
 		} catch (error) {
 			return error;
 		}
 	},
 	async getAllUsers() {
 		try {
-			return await UserOffice.findAll();
+			const allUsers = await UserOffice.findAll();
+			return allUsers;
 		} catch (error) {
 			return error;
 		}
 	},
 	async deleteUser() {
 		try {
-			return await UserOffice.destroy({where: {id: dataObj.user_id}});
+			const deletedUser = await UserOffice.destroy({where: {id: dataObj.user_id}});
+			return deletedUser;
 		} catch (error) {
+			console.log('Error in deleteUser model is ', error);
 			return error;
 		}
 	},
 
 	async addUserToCompany({user, company}) {
 		try {
-			return await UserOfficeCompany.create({UserOfficeId: user, CompanyId: company});
+			const userAddedToCompany = await UserOfficeCompany.create({UserOfficeId: user, CompanyId: company});
+			console.log('user Added to company', userAddedToCompany);
+			return userAddedToCompany;
 		} catch (error) {
 			console.log('Error1', error);
 			return error;
 		}
 	},
+	// FindUserInCompany: async function({user,company})
 };
 
 module.exports = {authModel};

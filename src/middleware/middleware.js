@@ -21,14 +21,14 @@ const middleware = {
 		} else {
 			next();
 		}
-
+		
 	},
 
 	checkToken(req, res, next) {
+		console.log('This is working1')
 		if (req.headers.cookie && (req.headers.cookie).includes('token')) {
 			try {
 				const token = req.headers.cookie.split('=')[1];
-				console.log('Token is', token)
 				if (!token) {
 					return res.status(403).json({message: 'User1 is not authorized'});
 				}
@@ -48,7 +48,7 @@ const middleware = {
 						req.user.role='user';
 						break;
 				}
-
+				
 				next();
 			} catch (error) {
 				console.log('Error, user is not authorized! Token has been compromised');
@@ -59,77 +59,62 @@ const middleware = {
 			return res.status(403).json({message: 'User3 is not authorized'});
 		}
 	},
-	verifyRole (){
-		return(req, res, next) => {
-		const decoded = jwt.verify(token, process.env.SECRET_KEY);
-		console.log('Deco', decoded)
-		switch (decoded.roleId) {
-			case '0c881288-0ac5-4b62-acce-e1051d69eaa2':
-				req.user.role = 'admin'
-				break;
-			case '813a816d-5f44-4f60-8685-4269de85bdaa':
-				req.user.role ='boss'
-				break;
-			case '6cb61682-c110-4d1b-b8fa-d9c5edcb6f4a':
-				req.user.role ='accountant'
-				break;
-			default:
-				req.user.role='user';
-				break;
-		}
-		next()
-		}
-	},
-	paginateRequest() {
-		return(req, res, next) => {
 
+	paginateRequest(req, res, next) {
+			console.log('Nothing happens')
 			const userData = req.user;
-			const paginationData = req.body.pageable;
-
-			const id = userData.id;
-
-			const sortField = paginationData.sort.sortField || 'created_at';
-			const sortOrder = (paginationData.sort.sortOrder || 'DESC').toUpperCase();
-
+			console.log('pagidata', userData)
+			console.log('req.body.pageable', req.body.pageable)
+			console.log('req params', req.query.params)
+			if(req.body.pageable){
+				const paginationData = req.body.pageable;
 			
-			const currentPage = paginationData.currentPage || 1;
-			const limitItems = paginationData.limit || 5;
-			const rangeFilter = paginationData.rangeFilter || null;
-			const searchFilter = paginationData.search || null;
-
-
-			const list = {};
-
-			const filter = {};
+			
+				const id = userData.id;
 	
-			if(paginationData.filter){
-				Object.keys(paginationData.filter).forEach((name) =>{
-					if(name !== 'sort' && name !== 'order' && name !=='page' && name !=='limit'){
-						filter[name]=paginationData.filter[name]
-					}
-				})
+				const sortField = paginationData.sort.sortField || 'created_at';
+				const sortOrder = (paginationData.sort.sortOrder || 'DESC').toUpperCase();
+				const currentPage = paginationData.currentPage || 1;
+				const limitItems = paginationData.limit || 5;
+				const rangeFilter = paginationData.rangeFilter || null;
+				const searchFilter = paginationData.search || null;
+	
+	
+				const list = {};
+	
+				const filter = {};
+		
+				if(paginationData.filter){
+					Object.keys(paginationData.filter).forEach((name) =>{
+						if(name !== 'sort' && name !== 'order' && name !=='page' && name !=='limit'){
+							filter[name]=paginationData.filter[name]
+						}
+					})
+				}
+				
+	
+	
+				list.sortField = sortField;
+				list.sortOrder = sortOrder;
+				list.currentPage = currentPage;
+				list.limitItems = limitItems;
+				list.filter = filter;
+				list.rangeFilter = rangeFilter;
+				list.userId = id;
+				list.searchFilter = searchFilter;
+	
+				req.list = list;
+			}else{
+				req.list = {}
 			}
 			
 
-
-			list.sortField = sortField;
-			list.sortOrder = sortOrder;
-			list.currentPage = currentPage;
-			list.limitItems = limitItems;
-			list.filter = filter;
-			list.rangeFilter = rangeFilter;
-			list.userId = id;
-			list.searchFilter = searchFilter;
-
-			req.list = list;
-
 			next()
-		}
+		
 		
 		
 		
 	}
-
 };
 
 module.exports = {middleware};

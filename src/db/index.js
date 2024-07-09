@@ -19,7 +19,7 @@ async function Authenticate() {
 	}
 }
 
-Authenticate().catch(error => {console.error("Error", error)});
+Authenticate();
 
 module.exports = {sequelize};
 

@@ -13,6 +13,16 @@ fs.writeFile(filePath, 'hello' + '\n', (err, data) => {
 	console.log(data);
 });
 
+function errorHandler(err) {
+	console.log('Error is', err);
+	err = JSON.stringify(err);
+	fs.appendFile(filePath, a + '\t' + err + '\n', (err, data) => {
+		if (err) {
+			return console.log('Errrorrrr', err);
+		}
+	});
+}
+
 const responseHandlers = {
 
 	errorHandler(res, err) {
@@ -30,7 +40,7 @@ const responseHandlers = {
 		});
 		// Console.log('Error is', err)
 		// err = JSON.stringify(err)
-		fs.appendFile(filePath, a + '\t' + err + '\n', (err) => {
+		fs.appendFile(filePath, a + '\t' + err + '\n', (err, data) => {
 			if (err) {
 				return console.log('Errrorrrr', err);
 			}
@@ -45,15 +55,14 @@ const responseHandlers = {
 		}
 	},
 
-	successHandler(res, response = 'Success') {
-		if (typeof (response) === 'string') {
+	successHandler(res, success_msg = 'Success') {
+		if (typeof (success_msg) === 'string') {
 			res.writeHead(200, {'Content-Type': 'text/html'});
-			res.end(response);
+			res.end(success_msg);
 		} else {
 			res.writeHead(200, {'Content-Type': 'application/json'});
-			res.end(JSON.stringify(response));
+			res.end(JSON.stringify(success_msg));
 		}
-		console.log('FINISH!==========================================================================================')
 	},
 
 };

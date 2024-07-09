@@ -7,5 +7,4 @@ function generateToken(id, email, roleId) {
 		roleId:roleId}, process.env.SECRET_KEY, {expiresIn: '1d'});
 }
 
-
 module.exports = {generateToken};

@@ -1,5 +1,6 @@
 const {authService} = require('../service/auth_service');
 const {responseHandlers} = require('../helpers/response_handlers.js');
+const {user} = require('../validation/user_reg_validation');
 const bcrypt = require('bcrypt');
 const {generateToken} = require('../helpers/generate_token');
 
@@ -48,7 +49,6 @@ const authController = {
 					console.log('Valid111', validPasswd);
 					if (validPasswd) {
 						const token = generateToken(userExists[0].id, userExists[0].email, userExists[0].role_id);
-						console.log('TOKEN IS', token);
 						res.send(JSON.stringify({token, user: userExists[0]}));
 					} else {
 						handleError(res, 400, {paswwd: 'Wrong passwd!'});
@@ -75,7 +75,7 @@ const authController = {
 		}
 	},
 
-	async deleteUsers(req) {
+	async deleteUsers(req, res) {
 		const dataObj = req.body;
 		try {
 			const deletedUser = await authService.deleteUser(dataObj);

@@ -4,18 +4,20 @@ const currencyModel = {
 
 	async addCurrency(requestData) {
 		try {
-			return await Currency.create({
+			const addedCurency = await Currency.create({
 				name: requestData.name,
 				sign: requestData.sign,
 				description: requestData.description,
 			});
+			return (addedCurency);
 		} catch (error) {
-			return (error);
+			return ('Model', error);
 		}
 	},
 	async getCurrency() {
 		try {
-			return Currency.findAll({where: {enabled: true}});
+			const allCurrency = await Currency.findAll({where: {enabled: true}});
+			return (allCurrency);
 		} catch (error) {
 			return (error);
 		}

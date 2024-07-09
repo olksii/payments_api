@@ -6,8 +6,8 @@ const {paymentTypeController} = require('../controllers/payment_type_controller.
 const api_link = '/api/3.0';
 
 // Получаем всех типы платежей
-router.get(`${api_link}/paymenttypes`, (req, res, next) => {
-	paymentTypeController.getPaymentTypes(req, res).catch(next);
+router.get(`${api_link}/paymenttypes`, (req, res) => {
+	paymentTypeController.getPaymentTypes(req, res);
 });
 
 module.exports = router;

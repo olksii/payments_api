@@ -2,24 +2,24 @@ const {paymentModel} = require('../models/payment_model.js');
 
 const paymentService = {
 
-	getPayments(list) {
-		return paymentModel.getPayments(list);
+	getPayments(filter, sortField, sortOrder, list) {
+		return paymentModel.getPayments(filter, sortField, sortOrder, list);
 	},
 
 	getPaymentById(id, sortField, sortOrder) {
 		return paymentModel.getPaymentById(id, sortField, sortOrder);
 	},
 
-	getPaymentsByUserId(list) {
-		return paymentModel.getPaymentsByUserId(list);
+	getPaymentsByUserId(id, filter, sortField, sortOrder ) {
+		return paymentModel.getPaymentsByUserId(id, filter, sortField, sortOrder );
 	},
 
-	createPayment(requestData, filename) {
-		return paymentModel.createPayment(requestData, filename);
+	createPayment(requestData, filelink) {
+		return paymentModel.createPayment(requestData, filelink);
 	},
 
-	createPaymentContractorRepresentativeContractor(requestData, filename) {
-		return paymentModel.createPaymentContractorRepresentativeContractor(requestData, filename);
+	createPaymentContractorRepresentativeContractor(requestData, filelink) {
+		return paymentModel.createPaymentContractorRepresentativeContractor(requestData, filelink);
 	},
 
 	deletePayment(id) {

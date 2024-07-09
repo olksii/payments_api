@@ -13,7 +13,7 @@ const Contractor = sequelize.define('Contractor', {
 		allowNull: false,
 	},
 	company_inn: {
-		type: DataTypes.INTEGER,
+		type: DataTypes.BIGINT,
 		allowNull: false,
 	},
 	enabled: {

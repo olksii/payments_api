@@ -4,17 +4,19 @@ const paymentStatusModel = {
 
 	async createPaymentStatus(requestData) {
 		try {
-			return await PaymentStatus.create({name: requestData.name, description: requestData.description});
+			const newPaymentStatus = await PaymentStatus.create({name: requestData.name, description: requestData.description});
+			return newPaymentStatus;
 		} catch (error) {
-			throw new Error (`Error:${error}`);
+			throw ('Error', error);
 		}
 	},
 
 	async getPaymentStatus(){
 		try {
-			return await PaymentStatus.findAll({where:{enabled:true}})
+			const paymentStatus = await PaymentStatus.findAll({where:{enabled:true}})
+			return paymentStatus;
 		} catch (error) {
-			throw new Error (`Error:${error}`);
+			throw ('Error', error);
 		}
 	}
 };

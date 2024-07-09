@@ -5,12 +5,12 @@ const {paymentStatusController} = require('../controllers/payment_status_control
 
 const api_link = '/api/3.0';
 
-router.post(`${api_link}/paymentstatus`, (req, res, next) => {
-	paymentStatusController.createPaymentStatus(req, res).catch(next);
+router.post(`${api_link}/paymentstatus`, (req, res) => {
+	paymentStatusController.createPaymentStatus(req, res);
 });
 
-router.get(`${api_link}/paymentstatus`, (req, res, next) => {
-	paymentStatusController.getPaymentStatus(req, res).catch(next);
+router.get(`${api_link}/paymentstatus`, (req, res) => {
+	paymentStatusController.getPaymentStatus(req, res);
 });
 
 module.exports = router;
